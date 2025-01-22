@@ -28,3 +28,8 @@ app.use("/api/patients", patientRoutes);
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// Default Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to Pathology Lab Report API");
+});
