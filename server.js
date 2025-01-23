@@ -6,6 +6,14 @@ require("dotenv").config();
 
 const patientRoutes = require("./routes/patientsroutes");
 
+app.use(
+  cors({
+    origin: "*", // Allow all origins (for debugging)
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type",
+  })
+);
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -19,8 +27,8 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => console.log("✅ MongoDB Connected Successfully"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // Routes
 app.use("/api/patients", patientRoutes);
