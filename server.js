@@ -6,14 +6,6 @@ require("dotenv").config();
 
 const patientRoutes = require("./routes/patientsroutes");
 
-app.use(
-  cors({
-    origin: "*", // Allow all origins (for debugging)
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type",
-  })
-);
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
