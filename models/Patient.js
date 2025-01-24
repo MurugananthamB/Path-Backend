@@ -6,8 +6,9 @@ const PatientSchema = new mongoose.Schema({
   patientName: { type: String, required: true },
   age: { type: Number, required: true },
   gender: { type: String, required: true },
-  date: { type: String, required: true }, // Ensure the frontend sends this
-  time: { type: String, required: true }, // Ensure the frontend sends this
+  date: { type: String, required: true },
+  time: { type: String, required: true },
+  barcode: { type: String }, // Allow barcode to be stored
 });
 
 module.exports = mongoose.model("Patient", PatientSchema);

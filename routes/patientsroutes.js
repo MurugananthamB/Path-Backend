@@ -4,15 +4,32 @@ const router = express.Router();
 
 router.post("/add-patient", async (req, res) => {
   try {
-    console.log("Received Patient Data:", req.body); // Debugging line
+    const { pathId, uhid, patientName, age, gender, date, time, barcode } =
+      req.body;
 
-    const newPatient = new Patient(req.body);
+    console.log("📌 Received Patient Data:", req.body);
+
+    if (!barcode) {
+      console.error("🚨 Error: Barcode is missing!");
+      return res.status(400).json({ error: "Barcode is missing!" });
+    }
+
+    const newPatient = new Patient({
+      pathId,
+      uhid,
+      patientName,
+      age,
+      gender,
+      date,
+      time,
+      barcode, // Ensure barcode is stored
+    });
+
     await newPatient.save();
-
+    console.log("✅ Patient saved successfully:", newPatient);
     res.status(201).json({ message: "Patient data added successfully!" });
   } catch (error) {
-    console.error("Error adding patient:", error); // Log error details
-
+    console.error("❌ Error adding patient:", error);
     res.status(500).json({ error: error.message });
   }
 });
