@@ -7,7 +7,7 @@ router.post("/add-patient", async (req, res) => {
     const { pathId, uhid, patientName, age, gender, date, time, barcode } =
       req.body;
 
-    console.log("📌 Received Patient Data:", req.body);
+
 
     if (!barcode) {
       console.error("🚨 Error: Barcode is missing!");
@@ -26,7 +26,7 @@ router.post("/add-patient", async (req, res) => {
     });
 
     await newPatient.save();
-    console.log("✅ Patient saved successfully:", newPatient);
+    console.log("✅ Patient data saved successfully:", newPatient);
     res.status(201).json({ message: "Patient data added successfully!" });
   } catch (error) {
     console.error("❌ Error adding patient:", error);

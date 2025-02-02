@@ -21,12 +21,7 @@ app.use(cors());
 
 // MongoDB Connection (Fixed)
 mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000, // Fail fast if MongoDB is unavailable
-    connectTimeoutMS: 10000, // Retry connecting for 10 seconds
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully"))
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err.message);
