@@ -7,13 +7,24 @@ router.post("/add-patient", async (req, res) => {
     const { pathId, uhid, patientName, age, gender, date, time, barcode } =
       req.body;
 
-
-
-    if (!barcode) {
-      console.error("🚨 Error: Barcode is missing!");
-      return res.status(400).json({ error: "Barcode is missing!" });
+    // ✅ Corrected Validation Check
+    if (
+      ![pathId, uhid, patientName, age, gender, barcode, date, time].every(
+        Boolean
+      )
+    ) {
+      return res.status(400).json({ error: "All fields are required." });
     }
 
+    // ✅ Corrected `pathId` in Database Query
+    const existingPatient = await Patient.findOne({ pathId });
+    if (existingPatient) {
+      return res
+        .status(409)
+        .json({ error: "Patient already exists with this Path ID." });
+    }
+
+    // ✅ Save New Patient
     const newPatient = new Patient({
       pathId,
       uhid,

@@ -4,7 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
+// Import Routes
 const patientRoutes = require("./routes/patientsroutes");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,7 +25,7 @@ app.use(cors());
 
 // MongoDB Connection (Fixed)
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected Successfully"))
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err.message);
@@ -30,6 +34,9 @@ mongoose
 
 // Routes
 app.use("/api/patients", patientRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/auth/users", userRoutes);
+
 
 // Start Server
 app.listen(PORT, () => {
