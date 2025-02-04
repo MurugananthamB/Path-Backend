@@ -9,6 +9,7 @@ const PatientSchema = new mongoose.Schema({
   date: { type: String, required: true },
   time: { type: String, required: true },
   barcode: { type: String }, // Allow barcode to be stored
+  userId: { type: String, require: true }, // ✅ Ensure userId is stored as a string
 });
 
 module.exports = mongoose.model("Patient", PatientSchema);

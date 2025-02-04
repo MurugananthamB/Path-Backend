@@ -4,19 +4,41 @@ const router = express.Router();
 
 router.post("/add-patient", async (req, res) => {
   try {
-    const { pathId, uhid, patientName, age, gender, date, time, barcode } =
-      req.body;
+    let {
+      pathId,
+      uhid,
+      patientName,
+      age,
+      gender,
+      date,
+      time,
+      barcode,
+      userId,
+    } = req.body;
 
-    // ✅ Corrected Validation Check
+    // ✅ Convert `userId` to a string if necessary
+    const storedUserId = userId ? String(userId) : null;
+
+    // ✅ Validate input (Ensure all fields are received)
     if (
-      ![pathId, uhid, patientName, age, gender, barcode, date, time].every(
-        Boolean
-      )
+      ![
+        pathId,
+        uhid,
+        patientName,
+        age,
+        gender,
+        barcode,
+        date,
+        time,
+        storedUserId,
+      ].every(Boolean)
     ) {
-      return res.status(400).json({ error: "All fields are required." });
+      return res
+        .status(400)
+        .json({ error: "All fields, including user ID, are required." });
     }
 
-    // ✅ Corrected `pathId` in Database Query
+    // ✅ Check if the patient already exists
     const existingPatient = await Patient.findOne({ pathId });
     if (existingPatient) {
       return res
@@ -33,15 +55,18 @@ router.post("/add-patient", async (req, res) => {
       gender,
       date,
       time,
-      barcode, // Ensure barcode is stored
+      barcode,
+      userId: storedUserId, // ✅ Store user ID correctly
     });
 
     await newPatient.save();
     console.log("✅ Patient data saved successfully:", newPatient);
-    res.status(201).json({ message: "Patient data added successfully!" });
+    res
+      .status(201)
+      .json({ message: "Patient data added successfully!", data: newPatient });
   } catch (error) {
     console.error("❌ Error adding patient:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Server error. Please try again later." });
   }
 });
 

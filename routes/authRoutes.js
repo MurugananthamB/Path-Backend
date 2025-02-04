@@ -1,6 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+require("dotenv").config;
 
 const router = express.Router();
 
@@ -38,25 +40,39 @@ router.post("/signup", async (req, res) => {
 
 // Login Route
 router.post("/login", async (req, res) => {
-  const { employeeId, password } = req.body;
-
   try {
+    const { employeeId, password } = req.body;
+
+    // ✅ Check if the user exists
     const user = await User.findOne({ employeeId });
-
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    if (user.status === "inactive") {
-      return res.status(403).json({ message: "Account is inactive." });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Invalid Employee ID or Password." });
     }
 
+    // ✅ Verify Password
     const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ message: "Invalid Employee ID or Password." });
+    }
 
-    if (!isMatch)
-      return res.status(400).json({ message: "Incorrect password" });
+    // ✅ Generate JWT Token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res.status(200).json({ message: "Login successful" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    // ✅ Send Response with Correct Data
+    res.status(200).json({
+      message: "Login successful",
+      userId: user._id, // ✅ Ensure this is returned
+      token, // Optional: Include a JWT Token for authentication
+    });
+  } catch (error) {
+    console.error("❌ Error logging in:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
 
