@@ -70,4 +70,22 @@ router.post("/add-patient", async (req, res) => {
   }
 });
 
+
+router.get("/get-patient/:pathId", async (req, res) => {
+  try {
+    const { pathId } = req.params;
+    const patient = await Patient.findOne({ pathId });
+
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.json(patient);
+  } catch (error) {
+    console.error("Error fetching patient data:", error);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+});
+
+
 module.exports = router;
