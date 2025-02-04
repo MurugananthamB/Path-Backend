@@ -29,11 +29,11 @@ router.get("/:employeeId", async (req, res) => {
 // Update User Info
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, employeeId, password } = req.body;
+  const { firstName, employeeId, password } = req.body;
 
   try {
     const updates = {};
-    if (name) updates.name = name;
+    if (firstName) updates.firstName = firstName;
     if (employeeId) updates.employeeId = employeeId;
 
     if (password) updates.password = await bcrypt.hash(password, 10);

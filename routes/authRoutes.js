@@ -6,9 +6,9 @@ const router = express.Router();
 
 // Signup Route
 router.post("/signup", async (req, res) => {
-  const { name, employeeId, password, passwordConfirmation } = req.body;
+  const { firstName, employeeId, password, passwordConfirmation } = req.body;
 
-  if (!name || !employeeId || !password || !passwordConfirmation) {
+  if (!firstName || !employeeId || !password || !passwordConfirmation) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -23,7 +23,7 @@ router.post("/signup", async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = new User({ name, employeeId, password: hashedPassword });
+  const newUser = new User({ firstName, employeeId, password: hashedPassword });
 
   try {
     await newUser.save();
