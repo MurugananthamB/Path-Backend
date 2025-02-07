@@ -88,4 +88,32 @@ router.get("/get-patient/:pathId", async (req, res) => {
 });
 
 
+// ✅ API to Fetch All Patients (With Optional Filters)
+router.get("/get-all", async (req, res) => {
+  try {
+    const { pathId, uhid, fromDate, toDate } = req.query;
+    let filter = {};
+
+    if (pathId) filter.pathId = pathId;
+    if (uhid) filter.uhid = uhid;
+    if (fromDate && toDate) {
+      filter.date = { $gte: new Date(fromDate), $lte: new Date(toDate) };
+    }
+
+    const patients = await Patient.find(filter)
+      .populate("userId", "firstName employeeId") // ✅ Fetch firstName & employeeId from User model
+      .sort({ date: -1 })
+      .select("date time pathId uhid patientName age gender userId");
+
+    res.status(200).json(patients);
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    res.status(500).json({ error: "Failed to fetch patient data" });
+  }
+});
+
+
+
+
+
 module.exports = router;
