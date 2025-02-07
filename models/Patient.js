@@ -8,8 +8,8 @@ const PatientSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
-  barcode: { type: String }, // Allow barcode to be stored
-  userId: { type: String, require: true }, // ✅ Ensure userId is stored as a string
+  barcode: { type: String },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // ✅ Corrected reference
 });
 
 module.exports = mongoose.model("Patient", PatientSchema);
