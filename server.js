@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const http = require("https");
+const https = require("https");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
@@ -12,7 +12,7 @@ const userRoutes = require("./routes/userRoutes");
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 const MONGO_URI = process.env.MONGO_URI;
 const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
 
