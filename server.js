@@ -17,7 +17,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 function keepServerAwake() {
     setInterval(() => {
-        http.get("https://your-render-app-url.onrender.com");
+        http.get("https://path-backend.onrender.com");
         console.log("Sent keep-alive request");
     }, 5 * 60 * 1000); // Every 5 minutes
 }
