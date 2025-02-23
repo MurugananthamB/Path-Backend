@@ -14,7 +14,7 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
-const SERVER_URL = process.env.RENDER_EXTERNAL_URL || "https://path-backend.onrender.com";
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
 
 // Function to prevent Render free tier from sleeping
 function keepServerAwake() {
