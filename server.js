@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const http = require("http");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
@@ -13,6 +14,15 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+
+function keepServerAwake() {
+    setInterval(() => {
+        http.get("https://your-render-app-url.onrender.com");
+        console.log("Sent keep-alive request");
+    }, 5 * 60 * 1000); // Every 5 minutes
+}
+
+keepServerAwake();
 
 if (!MONGO_URI) {
   console.error("❌ MONGO_URI is not set in environment variables!");
@@ -51,3 +61,4 @@ app.listen(PORT, () => {
 app.get("/", (req, res) => {
   res.send("Welcome to Pathology Lab Report API");
 });
+
