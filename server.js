@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const http = require("https");
+// const http = require("https");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
@@ -14,18 +14,18 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
-const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
+// const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
 
-// Function to prevent Render free tier from sleeping
-function keepServerAwake() {
-    setInterval(() => {
-        https.get(SERVER_URL, (res) => {
-            console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
-        }).on("error", (err) => {
-            console.error("⚠️ Keep-alive request failed:", err.message);
-        });
-    }, 5 * 60 * 1000); // Every 5 minutes
-}
+// // Function to prevent Render free tier from sleeping
+// function keepServerAwake() {
+//     setInterval(() => {
+//         https.get(SERVER_URL, (res) => {
+//             console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
+//         }).on("error", (err) => {
+//             console.error("⚠️ Keep-alive request failed:", err.message);
+//         });
+//     }, 5 * 60 * 1000); // Every 5 minutes
+// }
 
 if (!MONGO_URI) {
   console.error("❌ MONGO_URI is not set in environment variables!");
