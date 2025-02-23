@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const http = require("http");
+const http = require("https");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
@@ -14,15 +14,18 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL || "https://path-backend.onrender.com";
 
+// Function to prevent Render free tier from sleeping
 function keepServerAwake() {
     setInterval(() => {
-        http.get("https://path-backend.onrender.com");
-        console.log("Sent keep-alive request");
+        https.get(SERVER_URL, (res) => {
+            console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
+        }).on("error", (err) => {
+            console.error("⚠️ Keep-alive request failed:", err.message);
+        });
     }, 5 * 60 * 1000); // Every 5 minutes
 }
-
-keepServerAwake();
 
 if (!MONGO_URI) {
   console.error("❌ MONGO_URI is not set in environment variables!");
@@ -46,16 +49,6 @@ mongoose
 app.use("/api/patients", patientRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/users", userRoutes);
-
-
-// Start Server
-app.listen(PORT, () => {
-  console.log(
-    `✅ Server running on ${
-      process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`
-    }`
-  );
-});
 
 // Default Route
 app.get("/", (req, res) => {
