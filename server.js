@@ -47,7 +47,7 @@ if (SERVER_URL) {
     }).on("error", (err) => {
       console.error("⚠️ Keep-alive request failed:", err.message);
     });
-  }, 5 * 60 * 1000); // Every 5 minutes
+  }, 30 * 60 * 1000); // Every 5 minutes
 }
 
 // Start Server (Ensure it binds to 0.0.0.0)
