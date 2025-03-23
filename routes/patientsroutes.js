@@ -5,6 +5,7 @@ const router = express.Router();
 router.post("/add-patient", async (req, res) => {
   try {
     let {
+      prefix,
       pathId,
       uhid,
       patientName,
@@ -22,6 +23,7 @@ router.post("/add-patient", async (req, res) => {
     // ✅ Validate input (Ensure all fields are received)
     if (
       ![
+        prefix,
         pathId,
         uhid,
         patientName,
@@ -48,6 +50,7 @@ router.post("/add-patient", async (req, res) => {
 
     // ✅ Save New Patient
     const newPatient = new Patient({
+      prefix,
       pathId,
       uhid,
       patientName,
@@ -101,9 +104,9 @@ router.get("/get-all", async (req, res) => {
     }
 
     const patients = await Patient.find(filter)
-      .populate("userId", "firstName employeeId") // ✅ Fetch firstName & employeeId from User model
       .sort({ date: -1 })
-      .select("date time pathId uhid patientName age gender userId");
+      .select("date time pathId uhid patientName age gender userId prefix")
+      .populate("userId", "firstName employeeId"); // ✅ Populate user details!
 
     res.status(200).json(patients);
   } catch (error) {
@@ -111,5 +114,6 @@ router.get("/get-all", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch patient data" });
   }
 });
+
 
 module.exports = router;
