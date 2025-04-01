@@ -40,15 +40,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth/users", userRoutes);
 
 // Keep Server Awake (Only for free-tier Render)
-if (SERVER_URL) {
-  setInterval(() => {
-    https.get(SERVER_URL, (res) => {
-      console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
-    }).on("error", (err) => {
-      console.error("⚠️ Keep-alive request failed:", err.message);
-    });
-  }, 30 * 60 * 1000); // Every 5 minutes
-}
+// if (SERVER_URL) {
+//   setInterval(() => {
+//     https.get(SERVER_URL, (res) => {
+//       console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
+//     }).on("error", (err) => {
+//       console.error("⚠️ Keep-alive request failed:", err.message);
+//     });
+//   }, 30 * 60 * 1000); // Every 5 minutes
+// }
 
 // Start Server (Ensure it binds to 0.0.0.0)
 app.listen(PORT, "0.0.0.0", () => {
