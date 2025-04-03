@@ -6,10 +6,10 @@ const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
 // Import Routes
-const patientRoutes = require("./routes/patientsroutes");
+const patientRoutes = require("./routes/patientsRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-
+const prefixRoutes = require("./routes/prefixRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -38,6 +38,7 @@ mongoose
 app.use("/api/patients", patientRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/users", userRoutes);
+app.use("/api/master", prefixRoutes);
 
 // Keep Server Awake (Only for free-tier Render)
 // if (SERVER_URL) {
