@@ -10,6 +10,7 @@ const patientRoutes = require("./routes/patientsRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const prefixRoutes = require("./routes/prefixRoutes");
+const bbPatientRoutes = require("./routes/bbPatient");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -39,6 +40,7 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/auth/users", userRoutes);
 app.use("/api/master", prefixRoutes);
+app.use("/api/bbpatient", bbPatientRoutes);
 
 // Keep Server Awake (Only for free-tier Render)
 // if (SERVER_URL) {

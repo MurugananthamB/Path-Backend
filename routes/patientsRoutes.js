@@ -41,11 +41,14 @@ router.post("/add-patient", async (req, res) => {
     }
 
     // ✅ Check if the patient already exists
-    const existingPatient = await Patient.findOne({ pathId });
+    const existingPatient = await Patient.findOne({
+      prefix: req.body.prefix,
+      pathId: req.body.pathId,
+    });
     if (existingPatient) {
       return res
         .status(409)
-        .json({ error: "Patient already exists with this Path ID." });
+        .json({ error: "Patient already exists with this Path ID against Prefix." });
     }
 
     // ✅ Save New Patient
@@ -90,6 +93,45 @@ router.get("/get-patient/:pathId", async (req, res) => {
   }
 });
 
+// ✅ Get all unique prefixes for a given pathId
+router.get("/get-prefixes-for-pathid/:pathId", async (req, res) => {
+  try {
+    const { pathId } = req.params;
+
+    // Find all matching records with this pathId
+    const records = await Patient.find({ pathId }).select("prefix -_id");
+
+    if (!records || records.length === 0) {
+      return res.status(404).json([]);
+    }
+
+    // Extract unique prefixes
+    const uniquePrefixes = [...new Set(records.map((rec) => rec.prefix))];
+
+    res.json(uniquePrefixes);
+  } catch (error) {
+    console.error("Error fetching prefixes:", error);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+});
+
+// ✅ Get patient record by pathId + prefix (for reprint screen)
+router.get("/get-patient/:prefix/:pathId", async (req, res) => {
+  try {
+    const { prefix, pathId } = req.params;
+
+    const patient = await Patient.findOne({ prefix, pathId });
+
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.json(patient);
+  } catch (error) {
+    console.error("Error fetching patient:", error);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+});
 
 // ✅ API to Fetch All Patients (With Optional Filters)
 router.get("/get-all", async (req, res) => {
