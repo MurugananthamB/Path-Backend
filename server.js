@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const https = require("https");
 const cors = require("cors");
 require("dotenv").config(); // Load .env variables
 
@@ -12,8 +13,9 @@ const prefixRoutes = require("./routes/prefixRoutes");
 const bbPatientRoutes = require("./routes/bbPatient");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 const MONGO_URI = process.env.MONGO_URI;
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
 
 if (!MONGO_URI) {
   console.error("❌ MONGO_URI is not set in environment variables!");
@@ -40,17 +42,24 @@ app.use("/api/auth/users", userRoutes);
 app.use("/api/master", prefixRoutes);
 app.use("/api/bbpatient", bbPatientRoutes);
 
+// Keep Server Awake (Only for free-tier Render)
+// if (SERVER_URL) {
+//   setInterval(() => {
+//     https.get(SERVER_URL, (res) => {
+//       console.log(`🔄 Keep-alive request sent. Status: ${res.statusCode}`);
+//     }).on("error", (err) => {
+//       console.error("⚠️ Keep-alive request failed:", err.message);
+//     });
+//   }, 30 * 60 * 1000); // Every 5 minutes
+// }
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(
-    `✅ Server running on ${
-      process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`
-    }`
-  );
+// Start Server (Ensure it binds to 0.0.0.0)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 // Default Route
 app.get("/", (req, res) => {
   res.send("Welcome to Pathology Lab Report API");
 });
+
