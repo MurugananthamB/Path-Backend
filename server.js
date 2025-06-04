@@ -13,7 +13,7 @@ const prefixRoutes = require("./routes/prefixRoutes");
 const bbPatientRoutes = require("./routes/bbPatient");
 
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const SERVER_URL = process.env.RENDER_EXTERNAL_URL;
 
